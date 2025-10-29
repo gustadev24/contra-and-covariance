@@ -8,6 +8,7 @@ import com.app.model.Presenter;
 import com.app.organizers.CommissionMember;
 import com.app.organizers.OrganizerCommission;
 import com.app.participants.*;
+import com.app.payment.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class App {
         printHeader();
         
         // Ejecutar demos interactivas de covarianza y contravarianza
-        System.out.println("\n🎯 PARTE 1: DEMOSTRACIONES INTERACTIVAS\n");
+        System.out.println("\n🎯 PARTE 1: DEMOSTRACIONES INTERACTIVAS DE GENÉRICOS\n");
         GenericsDemo.runAllDemos();
         
         System.out.println("\n\n" + "═".repeat(70));
@@ -34,6 +35,10 @@ public class App {
         
         // Demostrar el sistema completo
         runIntegratedSystem();
+        
+        // Nueva funcionalidad: Demos de pagos
+        System.out.println("\n\n" + "═".repeat(70));
+        PaymentDemo.runAllPaymentDemos();
         
         printFooter();
     }
@@ -99,6 +104,11 @@ public class App {
         System.out.println("\n" + "─".repeat(70));
         System.out.println("🎤 PASO 5: Sesión de Presentaciones\n");
         demonstratePresentations(nationalPresenters, internationalPresenters);
+        
+        // 6. Procesar pagos de participantes
+        System.out.println("\n" + "─".repeat(70));
+        System.out.println("💰 PASO 6: Procesamiento de Pagos de Participantes\n");
+        processParticipantPayments(students, teachers, administratives, guests);
     }
     
     /**
@@ -337,6 +347,86 @@ public class App {
         for (InternationalPresenter presenter : intlPresenters) {
             presenter.present(presenter.getTopic());
         }
+    }
+    
+    /**
+     * Procesa pagos de participantes (nueva funcionalidad)
+     */
+    private static void processParticipantPayments(List<Student> students,
+                                                   List<Teacher> teachers,
+                                                   List<Administrative> admins,
+                                                   List<Guest> guests) {
+        System.out.println("💳 Registrando pagos de participantes...\n");
+        
+        // Crear pagos para estudiantes
+        students.get(0).addPayment(new YapePayment(50.0, students.get(0).getName(), 
+                "987654321", "YAPE-S001"));
+        students.get(1).addPayment(new CardPayment(50.0, students.get(1).getName(), 
+                "VISA", "4242", students.get(1).getName()));
+        students.get(2).addPayment(new CashPayment(50.0, students.get(2).getName(), 
+                "Carmen Ortiz", "REC-S003", "PEN"));
+        students.get(3).addPayment(new YapePayment(50.0, students.get(3).getName(), 
+                "976543210", "YAPE-S004"));
+        students.get(4).addPayment(new CardPayment(50.0, students.get(4).getName(), 
+                "MasterCard", "5555", students.get(4).getName()));
+        
+        // Crear pagos para docentes
+        teachers.get(0).addPayment(new CardPayment(80.0, teachers.get(0).getName(), 
+                "VISA", "4111", teachers.get(0).getName()));
+        teachers.get(1).addPayment(new YapePayment(80.0, teachers.get(1).getName(), 
+                "965432109", "YAPE-T002"));
+        teachers.get(2).addPayment(new CashPayment(80.0, teachers.get(2).getName(), 
+                "Luis Herrera", "REC-T003", "PEN"));
+        
+        // Crear pagos para administrativos
+        admins.get(0).addPayment(new YapePayment(60.0, admins.get(0).getName(), 
+                "954321098", "YAPE-A001"));
+        admins.get(1).addPayment(new CardPayment(60.0, admins.get(1).getName(), 
+                "VISA", "3782", admins.get(1).getName()));
+        
+        // Recopilar todos los pagos
+        List<PaymentMethod> allPayments = new ArrayList<>();
+        
+        for (Student s : students) {
+            allPayments.addAll(s.getPaymentMethods());
+        }
+        for (Teacher t : teachers) {
+            allPayments.addAll(t.getPaymentMethods());
+        }
+        for (Administrative a : admins) {
+            allPayments.addAll(a.getPaymentMethods());
+        }
+        
+        // Procesar pagos usando covarianza
+        PaymentProcessor processor = new PaymentProcessor();
+        processor.generateReport(allPayments);
+        
+        // Mostrar estado de pagos
+        System.out.println("\n📋 Estado de Pagos por Participante:\n");
+        
+        System.out.println("👨‍🎓 ESTUDIANTES:");
+        for (Student s : students) {
+            System.out.println("   • " + s.getName() + ": " + s.getPaymentInfo());
+        }
+        
+        System.out.println("\n👨‍🏫 DOCENTES:");
+        for (Teacher t : teachers) {
+            System.out.println("   • " + t.getName() + ": " + t.getPaymentInfo());
+        }
+        
+        System.out.println("\n👔 ADMINISTRATIVOS:");
+        for (Administrative a : admins) {
+            System.out.println("   • " + a.getName() + ": " + a.getPaymentInfo());
+        }
+        
+        // Estadísticas
+        long fullyPaid = students.stream().filter(Participant::hasFullyPaid).count() +
+                        teachers.stream().filter(Participant::hasFullyPaid).count() +
+                        admins.stream().filter(Participant::hasFullyPaid).count();
+        
+        System.out.println("\n✅ Participantes con pago completo: " + fullyPaid);
+        System.out.println("💰 Total recaudado: S/ " + String.format("%.2f", 
+                allPayments.stream().mapToDouble(PaymentMethod::getAmount).sum()));
     }
     
     /**

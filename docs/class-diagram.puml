@@ -3,6 +3,8 @@
 !define LIGHTBLUE #E6F3FF
 !define LIGHTGREEN #E6FFE6
 !define LIGHTPINK #FFE6F0
+!define LIGHTORANGE #FFE6CC
+!define LIGHTPURPLE #F0E6FF
 
 skinparam classAttributeIconSize 0
 skinparam class {
@@ -16,12 +18,21 @@ package "com.app.model" {
         # name: String
         # email: String
         # type: String
+        # registrationFee: double
+        # paymentMethods: List<PaymentMethod>
+        # hasPaid: boolean
         + register(): void
         + getInfo(): String
+        + addPayment(payment: PaymentMethod): void
+        + getTotalPaid(): double
+        + hasFullyPaid(): boolean
+        + getPaymentMethods(): List<PaymentMethod>
+        + getPaymentInfo(): String
         + getId(): String
         + getName(): String
         + getEmail(): String
         + getType(): String
+        + getRegistrationFee(): double
     }
     
     interface Presenter {
@@ -95,6 +106,108 @@ package "com.app.organizers" <<LIGHTGREEN>> {
     }
 }
 
+package "com.app.payment" <<LIGHTORANGE>> {
+    abstract class PaymentMethod {
+        # amount: double
+        # payerName: String
+        # paymentDate: LocalDateTime
+        # transactionId: String
+        # status: PaymentStatus
+        + {abstract} processPayment(): boolean
+        + {abstract} getPaymentDetails(): String
+        + {abstract} getPaymentType(): String
+        + getInfo(): String
+        + getAmount(): double
+        + getPayerName(): String
+        + getTransactionId(): String
+        + getStatus(): PaymentStatus
+        + setStatus(status: PaymentStatus): void
+    }
+    
+    abstract class DigitalPayment {
+        # accountReference: String
+        # requiresVerification: boolean
+        # isVerified: boolean
+        + verifyPayment(): boolean
+        + processPayment(): boolean
+        + getAccountReference(): String
+        + isVerified(): boolean
+    }
+    
+    class YapePayment {
+        - phoneNumber: String
+        - yapeCode: String
+        + getPaymentType(): String
+        + getPaymentDetails(): String
+        + processPayment(): boolean
+        + getPhoneNumber(): String
+        + getYapeCode(): String
+    }
+    
+    class CardPayment {
+        - cardType: String
+        - lastFourDigits: String
+        - cardholderName: String
+        + getPaymentType(): String
+        + getPaymentDetails(): String
+        + processPayment(): boolean
+        + validateCVV(cvv: String): boolean
+        + getCardType(): String
+        + getLastFourDigits(): String
+        + getCardholderName(): String
+    }
+    
+    class CashPayment {
+        - receivedBy: String
+        - receiptNumber: String
+        - currency: String
+        + getPaymentType(): String
+        + getPaymentDetails(): String
+        + processPayment(): boolean
+        + printReceipt(): void
+        + getReceivedBy(): String
+        + getReceiptNumber(): String
+        + getCurrency(): String
+    }
+    
+    class PaymentProcessor {
+        - totalProcessed: int
+        - totalAmount: double
+        + processAllPayments(payments: List<? extends PaymentMethod>): void
+        + processDigitalPayments(payments: List<? extends DigitalPayment>): void
+        + generateReport(payments: List<? extends PaymentMethod>): void
+        + comparePaymentLists(list1: List<? extends PaymentMethod>, list2: List<? extends PaymentMethod>): void
+        + getTotalProcessed(): int
+        + getTotalAmount(): double
+    }
+    
+    class PaymentRegistry {
+        - totalRegistered: int
+        + registerYapePayment(list: List<? super YapePayment>, payment: YapePayment): void
+        + registerCardPayment(list: List<? super CardPayment>, payment: CardPayment): void
+        + registerCashPayment(list: List<? super CashPayment>, payment: CashPayment): void
+        + registerPayments(destination: List<? super PaymentMethod>, payments: List<PaymentMethod>): void
+        + transferPayments(destination: List<? super PaymentMethod>, source: List<? extends PaymentMethod>): void
+        + getTotalRegistered(): int
+    }
+    
+    class PaymentDemo {
+        + {static} runAllPaymentDemos(): void
+        - {static} demo1_CovarianzaConPagos(): void
+        - {static} demo2_ContravarianzaConPagos(): void
+        - {static} demo3_CombinandoAmbosConceptos(): void
+        - {static} demo4_PrincipioPECSConPagos(): void
+    }
+    
+    enum PaymentStatus {
+        PENDING
+        PROCESSING
+        COMPLETED
+        FAILED
+        REFUNDED
+    }
+}
+
 package "com.app.generics" <<LIGHTPINK>> {
     class EventRegistry {
         - allParticipants: List<Participant>
@@ -138,7 +251,7 @@ package "com.app" {
     }
 }
 
-' Relaciones de herencia
+' Relaciones de herencia - Participantes
 Participant <|-- Student
 Participant <|-- Teacher
 Participant <|-- Administrative
@@ -148,40 +261,120 @@ Participant <|-- Audience
 Participant <|-- Guest
 Teacher <|-- CommissionMember
 
+' Relaciones de herencia - Pagos
+PaymentMethod <|-- DigitalPayment
+PaymentMethod <|-- CashPayment
+DigitalPayment <|-- YapePayment
+DigitalPayment <|-- CardPayment
+
 ' Implementaciones de interface
 Presenter <|.. NationalPresenter
 Presenter <|.. InternationalPresenter
 
 ' Composición
 OrganizerCommission *-- CommissionMember
+Participant *-- PaymentMethod : contains
+PaymentMethod +-- PaymentStatus
 
-' Uso (dependencias principales)
+' Uso (dependencias principales) - Sistema de Participantes
 EventRegistry ..> Participant : uses
 EventRegistry ..> Presenter : uses
 ParticipantManager ..> Student : uses
 ParticipantManager ..> Participant : uses
 GenericsDemo ..> EventRegistry : uses
 GenericsDemo ..> ParticipantManager : uses
+
+' Uso (dependencias principales) - Sistema de Pagos
+PaymentProcessor ..> PaymentMethod : uses
+PaymentProcessor ..> DigitalPayment : uses
+PaymentRegistry ..> PaymentMethod : uses
+PaymentRegistry ..> YapePayment : uses
+PaymentRegistry ..> CardPayment : uses
+PaymentRegistry ..> CashPayment : uses
+PaymentDemo ..> PaymentProcessor : uses
+PaymentDemo ..> PaymentRegistry : uses
+PaymentDemo ..> YapePayment : uses
+PaymentDemo ..> CardPayment : uses
+PaymentDemo ..> CashPayment : uses
+
+' Uso - Aplicación Principal
 App ..> EventRegistry : uses
 App ..> ParticipantManager : uses
 App ..> GenericsDemo : uses
 App ..> OrganizerCommission : uses
+App ..> PaymentDemo : uses
+App ..> PaymentProcessor : uses
+App ..> YapePayment : uses
+App ..> CardPayment : uses
+App ..> CashPayment : uses
 
 note right of EventRegistry
   **COVARIANZA (? extends)**
   Permite LEER de colecciones
   de tipos más específicos
+  
+  Ejemplo: registerAll()
+  acepta List<Student>,
+  List<Teacher>, etc.
 end note
 
 note right of ParticipantManager
   **CONTRAVARIANZA (? super)**
   Permite ESCRIBIR en colecciones
   de tipos más generales
+  
+  Ejemplo: addStudent()
+  puede escribir en List<Student>,
+  List<Participant>, List<Object>
 end note
 
 note bottom of GenericsDemo
   Demuestra el principio PECS:
   Producer Extends, Consumer Super
+  con participantes
+end note
+
+note right of PaymentProcessor
+  **COVARIANZA (? extends)**
+  Procesa cualquier tipo de pago
+  
+  Ejemplo: processAllPayments()
+  acepta List<YapePayment>,
+  List<CardPayment>, etc.
+end note
+
+note right of PaymentRegistry
+  **CONTRAVARIANZA (? super)**
+  Registra pagos en colecciones
+  de tipos más generales
+  
+  Ejemplo: registerYapePayment()
+  puede escribir en List<YapePayment>,
+  List<DigitalPayment>, etc.
+end note
+
+note bottom of PaymentDemo
+  Demuestra PECS con pagos:
+  - Demo 1: Covarianza
+  - Demo 2: Contravarianza
+  - Demo 3: Combinación
+  - Demo 4: Principio PECS
+end note
+
+note bottom of Participant
+  Cada participante tiene:
+  - Tarifa de inscripción
+  - Lista de pagos realizados
+  - Estado de pago (completo/pendiente)
+end note
+
+note top of PaymentMethod
+  Jerarquía de pagos:
+  - PaymentMethod (abstracta)
+    - DigitalPayment (abstracta)
+      - YapePayment
+      - CardPayment
+    - CashPayment
 end note
 
 @enduml

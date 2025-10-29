@@ -9,12 +9,15 @@
 
 Proyecto académico que demuestra el uso de **Covarianza y Contravarianza** en Java mediante un sistema de gestión de participantes para el III Seminario Internacional de Ingeniería de Software. El proyecto implementa una jerarquía completa de clases que representa diferentes tipos de participantes (estudiantes, docentes, ponentes, administrativos, invitados, etc.) y utiliza genéricos con wildcards (`? extends` y `? super`) para demostrar estos conceptos fundamentales de la programación orientada a objetos.
 
+**🆕 NUEVA FUNCIONALIDAD**: Sistema completo de **métodos de pago** (Yape, Tarjeta, Efectivo) que continúa demostrando covarianza y contravarianza en un contexto práctico diferente.
+
 ### 🎯 Objetivos del Proyecto
 
 1. **Demostrar Covarianza**: Uso de `? extends` para flexibilidad en lectura de colecciones
 2. **Demostrar Contravarianza**: Uso de `? super` para flexibilidad en escritura de colecciones
 3. **Aplicar el Principio PECS**: Producer Extends, Consumer Super
 4. **Modelar un sistema real**: Gestión de participantes de un evento académico
+5. **🆕 Sistema de Pagos**: Implementar métodos de pago con covarianza y contravarianza
 
 ## 🏗️ Arquitectura del Proyecto
 
@@ -40,9 +43,19 @@ contra-and-covariance/
 │       ├── EventRegistry.java      # Demostración de COVARIANZA
 │       ├── ParticipantManager.java # Demostración de CONTRAVARIANZA
 │       └── GenericsDemo.java       # Ejemplos prácticos integrados
+│   └── payment/                    # 🆕 NUEVA FUNCIONALIDAD
+│       ├── PaymentMethod.java      # Clase abstracta base de pagos
+│       ├── DigitalPayment.java     # Clase abstracta para pagos digitales
+│       ├── YapePayment.java        # Implementación Yape
+│       ├── CardPayment.java        # Implementación Tarjeta
+│       ├── CashPayment.java        # Implementación Efectivo
+│       ├── PaymentProcessor.java   # COVARIANZA con pagos
+│       ├── PaymentRegistry.java    # CONTRAVARIANZA con pagos
+│       └── PaymentDemo.java        # Demostraciones de pagos
 ├── docs/
 │   ├── class-diagram.puml          # Diagrama UML del sistema
 │   ├── INFORME.md                  # Informe técnico completo
+│   ├── PAYMENT_FEATURE.md          # 🆕 Documentación de métodos de pago
 │   └── screenshots/
 │       └── ejecucion_completa.txt  # Salida completa de la ejecución
 ├── pom.xml                         # Configuración de Maven
@@ -105,6 +118,16 @@ Participant (abstract)
 └── InternationalPresenter (implements Presenter)
 ```
 
+### 🆕 Jerarquía de Métodos de Pago
+
+```
+PaymentMethod (abstract)
+├── DigitalPayment (abstract)
+│   ├── YapePayment
+│   └── CardPayment
+└── CashPayment
+```
+
 ### Clases de Genéricos
 
 1. **EventRegistry** - Demostración de Covarianza (`? extends`)
@@ -122,6 +145,25 @@ Participant (abstract)
    - Demo 2: Contravarianza - Escritura flexible
    - Demo 3: Combinación de ambos conceptos
    - Demo 4: Principio PECS
+
+### 🆕 Clases de Pagos (Nueva Funcionalidad)
+
+4. **PaymentProcessor** - Demostración de Covarianza con Pagos (`? extends`)
+   - `processAllPayments(List<? extends PaymentMethod>)`: Procesa cualquier tipo de pago
+   - `processDigitalPayments(List<? extends DigitalPayment>)`: Procesa pagos digitales
+   - `generateReport(List<? extends PaymentMethod>)`: Genera reportes de pagos
+
+5. **PaymentRegistry** - Demostración de Contravarianza con Pagos (`? super`)
+   - `registerYapePayment(List<? super YapePayment>, YapePayment)`: Registra pago Yape
+   - `registerCardPayment(List<? super CardPayment>, CardPayment)`: Registra pago con tarjeta
+   - `registerPayments(List<? super PaymentMethod>, List<PaymentMethod>)`: Registra múltiples pagos
+   - `transferPayments(List<? super PaymentMethod>, List<? extends PaymentMethod>)`: Transfiere pagos
+
+6. **PaymentDemo** - Demostraciones Completas de Pagos
+   - Demo 1: Covarianza - Procesamiento flexible de pagos
+   - Demo 2: Contravarianza - Registro flexible de pagos
+   - Demo 3: Combinación de ambos conceptos
+   - Demo 4: Principio PECS aplicado a pagos
 
 ## 🔍 Conceptos Clave
 
@@ -174,26 +216,34 @@ public void addStudent(List<? super Student> list, Student student) {
 | **La colección CONSUME datos** (escribes en ella) | `? super T` | `List<? super Student>` |
 | **Necesitas LEER Y ESCRIBIR** | Sin wildcard | `List<Student>` |
 
-## 📈 Salida de la Aplicación
+## � Salida de la Aplicación
 
-La aplicación ejecuta dos partes principales:
+La aplicación ejecuta tres partes principales:
 
-### Parte 1: Demostraciones Interactivas
+### Parte 1: Demostraciones Interactivas de Genéricos
 - **Demo 1**: Covarianza - Lectura flexible de diferentes tipos
 - **Demo 2**: Contravarianza - Escritura flexible en diferentes colecciones
 - **Demo 3**: Combinación de covarianza y contravarianza
 - **Demo 4**: Explicación del principio PECS
 
-### Parte 2: Sistema Integrado
+### Parte 2: Sistema Integrado de Participantes
 1. Creación de participantes (21 en total)
 2. Demostración de covarianza con registro masivo
 3. Demostración de contravarianza con gestión de colecciones
 4. Estadísticas del seminario
 5. Sesión de presentaciones
+6. **🆕 Procesamiento de pagos de participantes**
+
+### 🆕 Parte 3: Sistema de Pagos
+1. **Demo 1**: Covarianza - Procesamiento flexible de pagos (Yape, Tarjeta, Efectivo)
+2. **Demo 2**: Contravarianza - Registro flexible en diferentes colecciones
+3. **Demo 3**: Combinación de lectura y escritura flexible
+4. **Demo 4**: Principio PECS aplicado a pagos
 
 ## 📚 Documentación Adicional
 
 - **[INFORME.md](docs/INFORME.md)**: Documentación técnica detallada con explicación de todos los conceptos
+- **🆕 [PAYMENT_FEATURE.md](docs/PAYMENT_FEATURE.md)**: Documentación completa del sistema de métodos de pago
 - **[class-diagram.puml](docs/class-diagram.puml)**: Diagrama UML en formato PlantUML
 - **[Salida de Ejecución](docs/screenshots/ejecucion_completa.txt)**: Captura completa de la ejecución del programa
 
@@ -226,6 +276,55 @@ List<Object> objectList = new ArrayList<>();
 manager.addStudent(studentList, student);      // List<Student>
 manager.addStudent(participantList, student);  // List<Participant>
 manager.addStudent(objectList, student);       // List<Object>
+```
+
+### 🆕 Ejemplo 3: Covarianza con Pagos - Procesar diferentes tipos de pago
+
+```java
+PaymentProcessor processor = new PaymentProcessor();
+
+List<YapePayment> yapePayments = Arrays.asList(/* ... */);
+List<CardPayment> cardPayments = Arrays.asList(/* ... */);
+List<CashPayment> cashPayments = Arrays.asList(/* ... */);
+
+// ✅ Todas estas llamadas son válidas gracias a covarianza
+processor.processAllPayments(yapePayments);    // List<YapePayment>
+processor.processAllPayments(cardPayments);    // List<CardPayment>
+processor.processAllPayments(cashPayments);    // List<CashPayment>
+```
+
+### 🆕 Ejemplo 4: Contravarianza con Pagos - Registrar en diferentes colecciones
+
+```java
+PaymentRegistry registry = new PaymentRegistry();
+YapePayment yape = new YapePayment(50.0, "Ana García", "987654321", "YAPE-001");
+
+List<YapePayment> yapeList = new ArrayList<>();
+List<DigitalPayment> digitalList = new ArrayList<>();
+List<PaymentMethod> paymentList = new ArrayList<>();
+List<Object> objectList = new ArrayList<>();
+
+// ✅ Todas estas llamadas son válidas gracias a contravarianza
+registry.registerYapePayment(yapeList, yape);      // List<YapePayment>
+registry.registerYapePayment(digitalList, yape);   // List<DigitalPayment>
+registry.registerYapePayment(paymentList, yape);   // List<PaymentMethod>
+registry.registerYapePayment(objectList, yape);    // List<Object>
+```
+
+### 🆕 Ejemplo 5: Agregar pagos a participantes
+
+```java
+// Crear participante
+Student student = new Student("S001", "Ana García", "ana@mail.com", 
+                              "Universidad Nacional", "Ing. Software");
+
+// Crear y agregar pagos
+YapePayment yape = new YapePayment(50.0, "Ana García", "987654321", "YAPE-001");
+student.addPayment(yape);
+
+// Verificar estado
+System.out.println(student.getPaymentInfo());
+System.out.println("Ha pagado completamente: " + student.hasFullyPaid());
 ```
 
 ## 🛠️ Comandos Útiles
@@ -266,6 +365,7 @@ Este es un proyecto académico desarrollado por el equipo del III Seminario Inte
 - **Persona 3**: Comisión organizadora e invitados (CommissionMember, OrganizerCommission, Guest)
 - **Persona 4**: Covarianza y Contravarianza (EventRegistry, ParticipantManager, GenericsDemo, Documentación)
 - **Persona 5**: Integración y coordinación (App.java, README, Diagrama UML, Documentación de integración)
+- **🆕 Extensión**: Sistema de Métodos de Pago (PaymentMethod, YapePayment, CardPayment, CashPayment, PaymentProcessor, PaymentRegistry, PaymentDemo, Documentación de pagos)
 
 ## 📝 Licencia
 
