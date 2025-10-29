@@ -1,0 +1,187 @@
+@startuml
+!define LIGHTYELLOW #FFF9E6
+!define LIGHTBLUE #E6F3FF
+!define LIGHTGREEN #E6FFE6
+!define LIGHTPINK #FFE6F0
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor LIGHTYELLOW
+    BorderColor Black
+}
+
+package "com.app.model" {
+    abstract class Participant {
+        # id: String
+        # name: String
+        # email: String
+        # type: String
+        + register(): void
+        + getInfo(): String
+        + getId(): String
+        + getName(): String
+        + getEmail(): String
+        + getType(): String
+    }
+    
+    interface Presenter {
+        + present(topic: String): void
+    }
+}
+
+package "com.app.participants" <<LIGHTBLUE>> {
+    class Student {
+        - university: String
+        - career: String
+        + getUniversity(): String
+        + getCareer(): String
+    }
+    
+    class Teacher {
+        - institution: String
+        - specialty: String
+        + getInstitution(): String
+        + getSpecialty(): String
+    }
+    
+    class Administrative {
+        - department: String
+        - position: String
+        + getDepartment(): String
+        + getPosition(): String
+    }
+    
+    class NationalPresenter {
+        - topic: String
+        - institution: String
+        + present(topic: String): void
+        + getTopic(): String
+        + getInstitution(): String
+    }
+    
+    class InternationalPresenter {
+        - topic: String
+        - country: String
+        - institution: String
+        + present(topic: String): void
+        + getTopic(): String
+        + getCountry(): String
+        + getInstitution(): String
+    }
+    
+    class Audience {
+        - isInternational: boolean
+        + isInternational(): boolean
+    }
+    
+    class Guest {
+        - organization: String
+        + getOrganization(): String
+    }
+}
+
+package "com.app.organizers" <<LIGHTGREEN>> {
+    class CommissionMember {
+        - commissionRole: String
+        + getCommissionRole(): String
+    }
+    
+    class OrganizerCommission {
+        - commissionName: String
+        - members: List<CommissionMember>
+        + addMember(member: CommissionMember): void
+        + displayMembers(): void
+        + getMembers(): List<CommissionMember>
+    }
+}
+
+package "com.app.generics" <<LIGHTPINK>> {
+    class EventRegistry {
+        - allParticipants: List<Participant>
+        + printPresenters(presenters: List<? extends Presenter>): void
+        + getParticipantsByType(type: String): List<? extends Participant>
+        + registerAll(participants: List<? extends Participant>): void
+        + compareLists(list1: List<? extends Participant>, list2: List<? extends Participant>): void
+        + addParticipant(participant: Participant): void
+        + getAllParticipants(): List<Participant>
+    }
+    
+    class ParticipantManager {
+        + addStudent(list: List<? super Student>, student: Student): void
+        + addStudents(destination: List<? super Student>, students: List<Student>): void
+        + transferParticipants(destination: List<? super Participant>, source: List<Participant>): void
+        + addIfRegistered(list: List<? super Participant>, participant: Participant): void
+        + mergeLists(destination: List<? super Student>, list1: List<Student>, list2: List<Student>): void
+        + addStudentStrict(list: List<Student>, student: Student): void
+    }
+    
+    class GenericsDemo {
+        + {static} runAllDemos(): void
+        - {static} demoCovariance(): void
+        - {static} demoContravariance(): void
+        - {static} demoCombined(): void
+        - {static} demoPECS(): void
+    }
+}
+
+package "com.app" {
+    class App {
+        + {static} main(args: String[]): void
+        - {static} runIntegratedSystem(): void
+        - {static} createStudents(): List<Student>
+        - {static} createTeachers(): List<Teacher>
+        - {static} createAdministratives(): List<Administrative>
+        - {static} createNationalPresenters(): List<NationalPresenter>
+        - {static} createInternationalPresenters(): List<InternationalPresenter>
+        - {static} createGuests(): List<Guest>
+        - {static} createCommission(): OrganizerCommission
+    }
+}
+
+' Relaciones de herencia
+Participant <|-- Student
+Participant <|-- Teacher
+Participant <|-- Administrative
+Participant <|-- NationalPresenter
+Participant <|-- InternationalPresenter
+Participant <|-- Audience
+Participant <|-- Guest
+Teacher <|-- CommissionMember
+
+' Implementaciones de interface
+Presenter <|.. NationalPresenter
+Presenter <|.. InternationalPresenter
+
+' Composición
+OrganizerCommission *-- CommissionMember
+
+' Uso (dependencias principales)
+EventRegistry ..> Participant : uses
+EventRegistry ..> Presenter : uses
+ParticipantManager ..> Student : uses
+ParticipantManager ..> Participant : uses
+GenericsDemo ..> EventRegistry : uses
+GenericsDemo ..> ParticipantManager : uses
+App ..> EventRegistry : uses
+App ..> ParticipantManager : uses
+App ..> GenericsDemo : uses
+App ..> OrganizerCommission : uses
+
+note right of EventRegistry
+  **COVARIANZA (? extends)**
+  Permite LEER de colecciones
+  de tipos más específicos
+end note
+
+note right of ParticipantManager
+  **CONTRAVARIANZA (? super)**
+  Permite ESCRIBIR en colecciones
+  de tipos más generales
+end note
+
+note bottom of GenericsDemo
+  Demuestra el principio PECS:
+  Producer Extends, Consumer Super
+end note
+
+@enduml

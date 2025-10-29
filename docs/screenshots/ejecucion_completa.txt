@@ -1,0 +1,395 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< com.app:covariance-contravariance >------------------
+[INFO] Building Covariance and Contravariance Examples 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- exec:3.6.2:java (default-cli) @ covariance-contravariance ---
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║     III SEMINARIO INTERNACIONAL DE INGENIERÍA DE SOFTWARE     ║
+║                                                                ║
+║            Sistema de Gestión de Participantes                ║
+║                                                                ║
+║     Demostración de COVARIANZA y CONTRAVARIANZA en Java       ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+🎯 PARTE 1: DEMOSTRACIONES INTERACTIVAS
+
+╔════════════════════════════════════════════════════════════════╗
+║   DEMOSTRACIÓN: COVARIANZA Y CONTRAVARIANZA EN JAVA          ║
+║   III Seminario Internacional de Ingeniería de Software      ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────┐
+│  DEMO 1: COVARIANZA (? extends) - LECTURA FLEXIBLE         │
+└─────────────────────────────────────────────────────────────┘
+
+🔹 Registrando estudiantes (List<Student>):
+
+=== COVARIANZA - Registro masivo ===
+Registrando 2 participantes...
+[REGISTRO] Estudiante registrado: Ana García
+[REGISTRO] Estudiante registrado: Carlos López
+Total de participantes registrados: 2
+
+🔹 Registrando ponentes nacionales (List<NationalPresenter>):
+
+=== COVARIANZA - Registro masivo ===
+Registrando 1 participantes...
+[REGISTRO] Ponente Nacional registrado: Dr. María Torres
+Total de participantes registrados: 3
+
+🔹 Registrando ponentes internacionales (List<InternationalPresenter>):
+
+=== COVARIANZA - Registro masivo ===
+Registrando 1 participantes...
+[REGISTRO] Ponente Internacional registrado: Prof. John Smith
+Total de participantes registrados: 4
+
+🔹 Procesando ponentes con covarianza:
+
+=== COVARIANZA - Imprimiendo Ponentes ===
+Tipo de parámetro: List<? extends Presenter>
+Podemos LEER pero NO ESCRIBIR
+Total de ponentes: 2
+  - NationalPresenter
+[PRESENTACIÓN] Dr. María Torres presenta: Tema del seminario
+  - InternationalPresenter
+[PRESENTACIÓN INTERNACIONAL] Prof. John Smith (USA) presenta: Tema del seminario
+
+=== COVARIANZA - Imprimiendo Ponentes ===
+Tipo de parámetro: List<? extends Presenter>
+Podemos LEER pero NO ESCRIBIR
+Total de ponentes: 1
+  - NationalPresenter
+[PRESENTACIÓN] Dr. María Torres presenta: Tema del seminario
+
+=== COVARIANZA - Comparando listas ===
+Lista 1 tiene 2 elementos
+Lista 2 tiene 1 elementos
+Primer elemento Lista 1: Ana García
+Primer elemento Lista 2: Dr. María Torres
+
+✅ CONCLUSIÓN COVARIANZA:
+   - Podemos LEER de listas de tipos más específicos
+   - '? extends Participant' acepta List<Student>, List<Teacher>, etc.
+   - Útil para métodos que solo CONSUMEN/LEEN datos
+
+======================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│  DEMO 2: CONTRAVARIANZA (? super) - ESCRITURA FLEXIBLE     │
+└─────────────────────────────────────────────────────────────┘
+
+🔸 Agregando a List<Student>:
+
+=== CONTRAVARIANZA - Agregando estudiante ===
+Tipo de parámetro: List<? super Student>
+Podemos ESCRIBIR pero solo LEER como Object
+✅ Estudiante agregado: Laura Martínez
+Al leer obtenemos Object: Student
+
+🔸 Agregando a List<Participant>:
+
+=== CONTRAVARIANZA - Agregando estudiante ===
+Tipo de parámetro: List<? super Student>
+Podemos ESCRIBIR pero solo LEER como Object
+✅ Estudiante agregado: Pedro Ramírez
+Al leer obtenemos Object: Student
+
+🔸 Agregando a List<Object>:
+
+=== CONTRAVARIANZA - Agregando estudiante ===
+Tipo de parámetro: List<? super Student>
+Podemos ESCRIBIR pero solo LEER como Object
+✅ Estudiante agregado: Sofia Chen
+Al leer obtenemos Object: Student
+
+🔸 Transferencia masiva a List<Participant>:
+
+=== CONTRAVARIANZA - Agregando múltiples estudiantes ===
+Transfiriendo 2 estudiantes a la lista destino
+  ✅ Transferido: Miguel Ángel
+  ✅ Transferido: Diana Torres
+Total de elementos en destino: 3
+
+🔸 Transferencia masiva a List<Object>:
+
+=== CONTRAVARIANZA - Agregando múltiples estudiantes ===
+Transfiriendo 2 estudiantes a la lista destino
+  ✅ Transferido: Miguel Ángel
+  ✅ Transferido: Diana Torres
+Total de elementos en destino: 3
+
+✅ CONCLUSIÓN CONTRAVARIANZA:
+   - Podemos ESCRIBIR en listas de tipos más generales
+   - '? super Student' acepta List<Student>, List<Participant>, List<Object>
+   - Útil para métodos que PRODUCEN/ESCRIBEN datos
+
+======================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│  DEMO 3: COMBINACIÓN - COVARIANZA + CONTRAVARIANZA         │
+└─────────────────────────────────────────────────────────────┘
+
+🔄 Paso 1 - COVARIANZA: Leer y registrar estudiantes
+
+=== COVARIANZA - Registro masivo ===
+Registrando 2 participantes...
+[REGISTRO] Estudiante registrado: Andrea Ruiz
+[REGISTRO] Estudiante registrado: Roberto Gómez
+Total de participantes registrados: 2
+
+🔄 Paso 2 - COVARIANZA: Leer y registrar docentes
+
+=== COVARIANZA - Registro masivo ===
+Registrando 2 participantes...
+[REGISTRO] Docente registrado: Prof. Juan Pérez
+[REGISTRO] Docente registrado: Ing. María González
+Total de participantes registrados: 4
+
+🔄 Paso 3 - CONTRAVARIANZA: Transferir a List<Object>
+
+=== CONTRAVARIANZA - Transferencia de participantes ===
+Tipo de destino: List<? super Participant>
+Elementos a transferir: 4
+  ✅ Transferido: Estudiante - Andrea Ruiz
+  ✅ Transferido: Estudiante - Roberto Gómez
+  ✅ Transferido: Docente - Prof. Juan Pérez
+  ✅ Transferido: Docente - Ing. María González
+Transferencia completada. Total en destino: 4
+
+✅ CONCLUSIÓN COMBINADA:
+   - COVARIANZA para LEER de colecciones específicas
+   - CONTRAVARIANZA para ESCRIBIR en colecciones generales
+   - Juntas permiten pipelines de transformación flexible
+
+======================================================================
+
+┌─────────────────────────────────────────────────────────────┐
+│  DEMO 4: PRINCIPIO PECS (Producer Extends, Consumer Super) │
+└─────────────────────────────────────────────────────────────┘
+
+📚 PRINCIPIO PECS - Guía de decisión:
+
+1️⃣  PRODUCER EXTENDS (? extends T)
+   ┌─────────────────────────────────────────┐
+   │ Usa cuando: La colección PRODUCE datos │
+   │            Solo necesitas LEER          │
+   └─────────────────────────────────────────┘
+   Ejemplo:
+   📖 Procesando 1 ponente(s) de la lista (LECTURA)
+      - NationalPresenter
+
+2️⃣  CONSUMER SUPER (? super T)
+   ┌─────────────────────────────────────────┐
+   │ Usa cuando: La colección CONSUME datos │
+   │            Necesitas ESCRIBIR           │
+   └─────────────────────────────────────────┘
+   Ejemplo:
+   ✍️  Estudiante agregado a colección (ESCRITURA): Carmen Ortiz
+      Tamaño de colección: 1
+
+3️⃣  SIN WILDCARD (T)
+   ┌─────────────────────────────────────────┐
+   │ Usa cuando: Necesitas LEER Y ESCRIBIR  │
+   │            Tipo exacto requerido        │
+   └─────────────────────────────────────────┘
+   Ejemplo:
+   Leído y escrito en List<Student> exacta: Luis Herrera
+
+╔════════════════════════════════════════════════════════════════╗
+║  REGLA DE ORO:                                                 ║
+║  • Si la colección PRODUCE → usa ? extends (covarianza)       ║
+║  • Si la colección CONSUME → usa ? super (contravarianza)     ║
+║  • Si hace AMBAS → NO uses wildcard                           ║
+╚════════════════════════════════════════════════════════════════╝
+
+
+══════════════════════════════════════════════════════════════════════
+
+🎯 PARTE 2: SISTEMA INTEGRADO DE PARTICIPANTES
+
+┌────────────────────────────────────────────────────────────┐
+│  SISTEMA DE REGISTRO Y GESTIÓN DE PARTICIPANTES           │
+└────────────────────────────────────────────────────────────┘
+
+📝 PASO 1: Creando participantes del seminario...
+
+✅ Creados 5 estudiantes
+✅ Creados 3 docentes
+✅ Creados 2 administrativos
+✅ Creados 3 ponentes nacionales
+✅ Creados 3 ponentes internacionales
+✅ Creados 2 invitados
+[COMISIÓN] Dr. Ricardo Moreno ha sido añadido/a a la Comisión Organizadora - III Seminario
+[COMISIÓN] Dra. Elena Vargas ha sido añadido/a a la Comisión Organizadora - III Seminario
+[COMISIÓN] Dr. Jorge López ha sido añadido/a a la Comisión Organizadora - III Seminario
+✅ Creada comisión organizadora con 3 miembros
+
+──────────────────────────────────────────────────────────────────────
+📊 PASO 2: COVARIANZA - Registro flexible de participantes
+
+🔹 COVARIANZA permite registrar DIFERENTES tipos de listas:
+   Usando List<? extends Participant> podemos aceptar:
+   • List<Student>
+   • List<Teacher>
+   • List<NationalPresenter>
+   • etc...
+
+
+=== COVARIANZA - Registro masivo ===
+Registrando 5 participantes...
+[REGISTRO] Estudiante registrado: Ana García Ruiz
+[REGISTRO] Estudiante registrado: Carlos Mendoza López
+[REGISTRO] Estudiante registrado: Laura Martínez
+[REGISTRO] Estudiante registrado: Diego Ramírez
+[REGISTRO] Estudiante registrado: Sofía Chen Wang
+Total de participantes registrados: 5
+
+=== COVARIANZA - Registro masivo ===
+Registrando 3 participantes...
+[REGISTRO] Docente registrado: Prof. Juan Pérez Torres
+[REGISTRO] Docente registrado: Dra. María González
+[REGISTRO] Docente registrado: Ing. Roberto Silva
+Total de participantes registrados: 8
+
+=== COVARIANZA - Registro masivo ===
+Registrando 2 participantes...
+[REGISTRO] Administrativo registrado: Carmen Ortiz
+[REGISTRO] Administrativo registrado: Luis Herrera
+Total de participantes registrados: 10
+
+=== COVARIANZA - Registro masivo ===
+Registrando 3 participantes...
+[REGISTRO] Ponente Nacional registrado: Dr. Andrés Solano
+[REGISTRO] Ponente Nacional registrado: Dra. Patricia Vargas
+[REGISTRO] Ponente Nacional registrado: Dr. Fernando Castro
+Total de participantes registrados: 13
+
+=== COVARIANZA - Registro masivo ===
+Registrando 3 participantes...
+[REGISTRO] Ponente Internacional registrado: Prof. John Smith
+[REGISTRO] Ponente Internacional registrado: Dr. María Fernández
+[REGISTRO] Ponente Internacional registrado: Prof. Wei Chen
+Total de participantes registrados: 16
+
+=== COVARIANZA - Registro masivo ===
+Registrando 2 participantes...
+[REGISTRO] Invitado registrado: Camila Restrepo
+[REGISTRO] Invitado registrado: Miguel Ángel Rojas
+Total de participantes registrados: 18
+
+🔹 Procesando ponentes con List<? extends Presenter>:
+
+=== COVARIANZA - Imprimiendo Ponentes ===
+Tipo de parámetro: List<? extends Presenter>
+Podemos LEER pero NO ESCRIBIR
+Total de ponentes: 6
+  - NationalPresenter
+[PRESENTACIÓN] Dr. Andrés Solano presenta: Tema del seminario
+  - NationalPresenter
+[PRESENTACIÓN] Dra. Patricia Vargas presenta: Tema del seminario
+  - NationalPresenter
+[PRESENTACIÓN] Dr. Fernando Castro presenta: Tema del seminario
+  - InternationalPresenter
+[PRESENTACIÓN INTERNACIONAL] Prof. John Smith (Estados Unidos) presenta: Tema del seminario
+  - InternationalPresenter
+[PRESENTACIÓN INTERNACIONAL] Dr. María Fernández (España) presenta: Tema del seminario
+  - InternationalPresenter
+[PRESENTACIÓN INTERNACIONAL] Prof. Wei Chen (China) presenta: Tema del seminario
+
+──────────────────────────────────────────────────────────────────────
+🔄 PASO 3: CONTRAVARIANZA - Gestión flexible de colecciones
+
+🔸 CONTRAVARIANZA permite ESCRIBIR en DIFERENTES tipos de listas:
+   Usando List<? super Student> podemos escribir en:
+   • List<Student>
+   • List<Participant>
+   • List<Object>
+
+🔸 Agregando estudiantes a diferentes tipos de colecciones:
+
+=== CONTRAVARIANZA - Agregando múltiples estudiantes ===
+Transfiriendo 2 estudiantes a la lista destino
+  ✅ Transferido: Ana García Ruiz
+  ✅ Transferido: Carlos Mendoza López
+Total de elementos en destino: 2
+
+=== CONTRAVARIANZA - Agregando múltiples estudiantes ===
+Transfiriendo 2 estudiantes a la lista destino
+  ✅ Transferido: Laura Martínez
+  ✅ Transferido: Diego Ramírez
+Total de elementos en destino: 2
+
+=== CONTRAVARIANZA - Agregando múltiples estudiantes ===
+Transfiriendo 1 estudiantes a la lista destino
+  ✅ Transferido: Sofía Chen Wang
+Total de elementos en destino: 1
+
+🔸 Resultados:
+   • List<Student> tiene: 2 elementos
+   • List<Participant> tiene: 2 elementos
+   • List<Object> tiene: 1 elementos
+
+=== CONTRAVARIANZA - Transferencia de participantes ===
+Tipo de destino: List<? super Participant>
+Elementos a transferir: 3
+  ✅ Transferido: Docente - Prof. Juan Pérez Torres
+  ✅ Transferido: Docente - Dra. María González
+  ✅ Transferido: Docente - Ing. Roberto Silva
+Transferencia completada. Total en destino: 5
+
+🔸 Después de transferir docentes:
+   • List<Participant> ahora tiene: 5 elementos
+
+──────────────────────────────────────────────────────────────────────
+📈 PASO 4: Estadísticas del Seminario
+
+╔════════════════════════════════════════════════════════════╗
+║           ESTADÍSTICAS DEL SEMINARIO                       ║
+╠════════════════════════════════════════════════════════════╣
+║ Total de Participantes: 21                              ║
+╠════════════════════════════════════════════════════════════╣
+║ • Estudiantes:                  5                        ║
+║ • Docentes:                     3                        ║
+║ • Administrativos:              2                        ║
+║ • Ponentes Nacionales:          3                        ║
+║ • Ponentes Internacionales:     3                        ║
+║ • Invitados Especiales:         2                        ║
+║ • Comisión Organizadora:        3                        ║
+╚════════════════════════════════════════════════════════════╝
+
+──────────────────────────────────────────────────────────────────────
+🎤 PASO 5: Sesión de Presentaciones
+
+🎤 Presentaciones del Seminario:
+
+📍 SESIÓN NACIONAL:
+[PRESENTACIÓN] Dr. Andrés Solano presenta: Microservicios y Arquitecturas Cloud-Native
+[PRESENTACIÓN] Dra. Patricia Vargas presenta: DevOps y CI/CD en Proyectos Enterprise
+[PRESENTACIÓN] Dr. Fernando Castro presenta: Machine Learning en Ingeniería de Software
+
+🌍 SESIÓN INTERNACIONAL:
+[PRESENTACIÓN INTERNACIONAL] Prof. John Smith (Estados Unidos) presenta: AI-Driven Software Development
+[PRESENTACIÓN INTERNACIONAL] Dr. María Fernández (España) presenta: Blockchain en Sistemas Distribuidos
+[PRESENTACIÓN INTERNACIONAL] Prof. Wei Chen (China) presenta: Quantum Computing Applications
+
+
+╔════════════════════════════════════════════════════════════════╗
+║                    FIN DE LA DEMOSTRACIÓN                      ║
+╠════════════════════════════════════════════════════════════════╣
+║  ✅ Covarianza (? extends): Flexibilidad en LECTURA           ║
+║  ✅ Contravarianza (? super): Flexibilidad en ESCRITURA       ║
+║                                                                ║
+║  📚 Principio PECS: Producer Extends, Consumer Super          ║
+╚════════════════════════════════════════════════════════════════╝
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.261 s
+[INFO] Finished at: 2025-10-29T06:38:13-05:00
+[INFO] ------------------------------------------------------------------------
