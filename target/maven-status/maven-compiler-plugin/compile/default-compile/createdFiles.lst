@@ -1,1 +1,5 @@
+com/app/participants/Teacher.class
 com/app/App.class
+com/app/model/Participant.class
+com/app/participants/Student.class
+com/app/participants/Administrative.class

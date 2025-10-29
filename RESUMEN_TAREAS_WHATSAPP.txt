@@ -1,0 +1,39 @@
+📢 PROYECTO COVARIANZA/CONTRAVARIANZA - DISTRIBUCIÓN DE TAREAS
+
+🔵 PERSONA 1: Estructura Base (2-3h)
+- Crear clase abstracta Participant.java
+- Implementar: Student.java, Teacher.java, Administrative.java
+- Documentar SU SECCIÓN del informe (Jerarquía de Clases Base)
+📦 Entrega: 4 archivos en model/ y participants/ + sección informe
+
+🟢 PERSONA 2: Ponentes + Público (2-3h)
+- Crear interface Presenter.java
+- Implementar: NationalPresenter.java, InternationalPresenter.java, Audience.java
+- Documentar SU SECCIÓN del informe (Ponentes y Público)
+📦 Entrega: 4 archivos en model/ y participants/ + sección informe
+
+🟡 PERSONA 3: Comisión + Invitados (2-3h)
+- Implementar: CommissionMember.java, OrganizerCommission.java, Guest.java
+- Documentar SU SECCIÓN del informe (Comisión Organizadora e Invitados)
+📦 Entrega: 3 archivos en organizers/ y participants/ + sección informe
+
+🟣 PERSONA 4: Covarianza y Contravarianza ⚠️ CRÍTICO (3-4h)
+- Crear: EventRegistry.java (covarianza)
+- Crear: ParticipantManager.java (contravarianza)
+- Crear: GenericsDemo.java (ejemplos)
+- Documentar SU SECCIÓN del informe (Covarianza/Contravarianza - LA MÁS IMPORTANTE)
+📦 Entrega: 3 archivos en generics/ + 1 doc + sección informe
+
+🔴 PERSONA 5: Integración + Coordinación (2-3h)
+- Actualizar App.java con todo integrado
+- Capturar 3+ screenshots de ejecución
+- Crear estructura del informe (INFORME.md) para que todos completen
+- Escribir SU SECCIÓN del informe (Integración y Ejecución)
+- Actualizar README.md
+- Generar diagrama UML
+- Integrar todas las secciones del informe al final
+📦 Entrega: App.java + screenshots + README + diagrama + coordinar informe
+
+📝 IMPORTANTE: INFORME COLABORATIVO
+Cada persona escribe SU PROPIA SECCIÓN del informe sobre lo que implementó.
+Persona 5 crea la estructura base y al final integra todo.
