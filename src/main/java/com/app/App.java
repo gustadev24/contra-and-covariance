@@ -75,7 +75,7 @@ public class App {
         
         // Comisión Organizadora
         OrganizerCommission commission = createCommission();
-        System.out.println("✅ Creada comisión organizadora con " + commission.getMembersCount() + " miembros");
+        System.out.println("✅ Creada comisión organizadora con " + commission.getMembers().size() + " miembros");
         
         // 2. Demostrar COVARIANZA con EventRegistry
         System.out.println("\n" + "─".repeat(70));
@@ -304,7 +304,7 @@ public class App {
                                          OrganizerCommission commission) {
         int totalParticipants = students.size() + teachers.size() + admins.size() +
                                nationalPresenters.size() + intlPresenters.size() +
-                               guests.size() + commission.getMembersCount();
+                               guests.size() + commission.getMembers().size();
         
         System.out.println("╔════════════════════════════════════════════════════════════╗");
         System.out.println("║           ESTADÍSTICAS DEL SEMINARIO                       ║");
@@ -317,7 +317,7 @@ public class App {
         System.out.println("║ • Ponentes Nacionales:          " + String.format("%-25s", nationalPresenters.size()) + "║");
         System.out.println("║ • Ponentes Internacionales:     " + String.format("%-25s", intlPresenters.size()) + "║");
         System.out.println("║ • Invitados Especiales:         " + String.format("%-25s", guests.size()) + "║");
-        System.out.println("║ • Comisión Organizadora:        " + String.format("%-25s", commission.getMembersCount()) + "║");
+        System.out.println("║ • Comisión Organizadora:        " + String.format("%-25s", commission.getMembers().size()) + "║");
         System.out.println("╚════════════════════════════════════════════════════════════╝");
     }
     
